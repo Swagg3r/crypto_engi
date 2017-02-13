@@ -177,5 +177,3 @@ static const uint8_t Nbdeca[16] = {
 };
 
 #endif /* DES_data.h */
-0
-
