@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 		printf("Avec le text de taille %d : [%s]\n",size,text);
 
 
- 
+  
 
 
 	} else {
