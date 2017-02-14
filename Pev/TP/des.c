@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
 	char* text;
 	int size;
 	key_set* key_sets = (key_set*)malloc(17*sizeof(key_set));
+	unsigned char* processed_block = (unsigned char*) malloc(8*sizeof(char));
 
 	if (argc < 2) {
 		printf("Usage : ./des encrypt/decrypt KEY plaintext/ciphertext\n");
@@ -52,19 +53,17 @@ int main(int argc, char* argv[]) {
 		*/
 
 		generate_sub_keys(key, key_sets);
-
-
-
+		process_message(text, processed_block, key_sets, 1);
+		chartohex(processed_block);
 
 	} else if (strcmp(argv[1], "decrypt") == 0){
 		/* Decryption Mode */
 		printf("Decryption mode avec clé = [%s] de taille %d\n",key,size);
 		printf("Avec le text de taille %d : [%s]\n",size,text);
 
-
+		generate_sub_keys(key, key_sets);
+		process_message(text, processed_block, key_sets, 0);
   
-
-
 	} else {
 		printf("Usage : ./des encrypt/decrypt KEY plaintext/ciphertext");
 		return 1;
@@ -170,7 +169,7 @@ void generate_sub_keys(char* main_key, key_set* key_sets) {
 }
 
 
-void process_message(unsigned char* message_piece, unsigned char* processed_piece, key_set* key_sets, int mode) {
+void process_message(char* message_piece, unsigned char* processed_piece, key_set* key_sets, int mode) {
 	/*
 	Mode == 0 : DECRYPTION
 	Mode == 1 : ENCRYPTION
@@ -351,4 +350,32 @@ void process_message(unsigned char* message_piece, unsigned char* processed_piec
 
 		processed_piece[i/8] |= (shift_byte >> i%8);
 	}
+}
+
+void print_char_as_binary(char input) {
+	int i;
+	for (i=0; i<8; i++) {
+		char shift_byte = 0x01 << (7-i);
+		if (shift_byte & input) {
+			printf("1");
+		} else {
+			printf("0");
+		}
+	}
+}
+
+
+void chartohex(unsigned char* in){
+	char outword[33];//17:16+1, 33:16*2+1
+    int i, len;
+
+    len = strlen(in);
+    if(in[len-1]=='\n')
+        in[--len] = '\0';
+
+    for(i = 0; i<len; i++){
+        sprintf(outword+i*2, "%02X", in[i]);
+    }
+    printf("%s\n", outword);
+    return 0;
 }

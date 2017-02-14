@@ -25,7 +25,9 @@ typedef struct {
 } key_set;
 
 void generate_sub_keys(char* main_key, key_set* key_sets);
-void process_message(unsigned char* message_piece, unsigned char* processed_piece, key_set* key_sets, int mode);
+void process_message(char* message_piece, unsigned char* processed_piece, key_set* key_sets, int mode);
+void print_char_as_binary(char input);
+void chartohex(unsigned char* in);
 
 
 /*
